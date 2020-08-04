@@ -10,6 +10,6 @@ if __name__ == '__main__':
 
     app = QApplication(sys.argv)
     MainWindow = Ui_MainWindow()
-
+print()
     MainWindow.show()
     sys.exit(app.exec_())
