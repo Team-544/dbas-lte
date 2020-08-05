@@ -17,7 +17,6 @@ class Ui_SignInDialog(QDialog):
     def __init__(self, parent=None):
         super(Ui_SignInDialog, self).__init__(parent)
         self.setupUi(self)
-        self.retranslateUi(self)
 
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")

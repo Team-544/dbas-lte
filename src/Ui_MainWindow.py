@@ -14,6 +14,8 @@ from PyQt5.QtCore import QCoreApplication, Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, qApp, QFileDialog
 
 from src.LogicCore import LogicCore
+from src.Ui_ExportDialog import Ui_ExportDialog
+from src.Ui_ImportDialog import Ui_ImportDialog
 from src.Ui_RegisterDialog import Ui_RegisterDialog
 from src.Ui_SignInDialog import Ui_SignInDialog
 from src.Ui_LogOutDialog import Ui_LogOutDialog
@@ -24,7 +26,6 @@ class Ui_MainWindow(QMainWindow):
         super(Ui_MainWindow, self).__init__()
         self.setupUi(self)
         self.init()
-        self.retranslateUi(self)
 
         self.operations = LogicCore(self)
 
@@ -137,16 +138,10 @@ class Ui_MainWindow(QMainWindow):
             self.showStatus("The passwords do not match, try again.")
 
     def onImport(self):
-        filenames = QFileDialog.getOpenFileNames(self,
-                                                 'Choose files',
-                                                 '/',
-                                                 'Data files(*.xlsx , *.xls , *.csv)')
+        ok, info = Ui_ImportDialog.getResult()
 
     def onExport(self):
-        filenames = QFileDialog.getSaveFileName(self,
-                                                'Save as',
-                                                '/untitled',
-                                                'Excel files(*.xlsx , *.xls)')
+        ok, info = Ui_ExportDialog.getResult()
 
     def onExit(self):
         qApp.quit()

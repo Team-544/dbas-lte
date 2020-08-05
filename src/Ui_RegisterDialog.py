@@ -16,7 +16,7 @@ class Ui_RegisterDialog(QDialog):
     def __init__(self):
         super(Ui_RegisterDialog, self).__init__()
         self.setupUi(self)
-        self.retranslateUi(self)
+        self.init(self)
 
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
@@ -54,15 +54,14 @@ class Ui_RegisterDialog(QDialog):
         self.lineEdit_3.setObjectName("lineEdit_3")
         self.verticalLayout.addWidget(self.lineEdit_3)
 
-        self.pushButton.clicked.connect(Dialog.accept)
-        self.pushButton_2.clicked.connect(Dialog.reject)
-
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
-    def init(self):
+    def init(self, Dialog):
         self.pushButton.clicked.connect(self.onRegister)
         self.pushButton_2.clicked.connect(qApp.quit)
+        self.pushButton.clicked.connect(Dialog.accept)
+        self.pushButton_2.clicked.connect(Dialog.reject)
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
