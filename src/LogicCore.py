@@ -31,3 +31,4 @@ class LogicCore:
             self.ui.showStatus("Your account is available now, please sign in.")
         except pyodbc.ProgrammingError:
             self.ui.showStatus("Your username is illegal, please try another one.")
+

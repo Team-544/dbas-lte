@@ -16,7 +16,6 @@ class Ui_LogOutDialog(QDialog):
     def __init__(self):
         super(Ui_LogOutDialog, self).__init__()
         self.setupUi(self)
-        self.retranslateUi(self)
 
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")

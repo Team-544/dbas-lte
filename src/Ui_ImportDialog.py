@@ -16,7 +16,6 @@ class Ui_ImportDialog(QDialog):
     def __init__(self):
         super(Ui_ImportDialog, self).__init__()
         self.setupUi(self)
-        self.retranslateUi(self)
         self.init(self)
 
     def setupUi(self, Dialog):
@@ -89,6 +88,12 @@ class Ui_ImportDialog(QDialog):
         self.groupBox_3 = QtWidgets.QGroupBox(self.page_2)
         self.groupBox_3.setGeometry(QtCore.QRect(20, 10, 621, 301))
         self.groupBox_3.setObjectName("groupBox_3")
+        self.comboBox = QtWidgets.QComboBox(self.groupBox_3)
+        self.comboBox.setGeometry(QtCore.QRect(280, 50, 211, 22))
+        self.comboBox.setObjectName("comboBox")
+        self.label_3 = QtWidgets.QLabel(self.groupBox_3)
+        self.label_3.setGeometry(QtCore.QRect(30, 50, 211, 16))
+        self.label_3.setObjectName("label_3")
         self.pushButton_3 = QtWidgets.QPushButton(self.page_2)
         self.pushButton_3.setGeometry(QtCore.QRect(570, 320, 75, 23))
         self.pushButton_3.setObjectName("pushButton_3")
@@ -102,12 +107,16 @@ class Ui_ImportDialog(QDialog):
         self.pushButton_2.clicked.connect(self.onNext)
         self.pushButton_3.clicked.connect(Dialog.accept)
 
+        self.pushButton_2.setEnabled(False)
+
     def onChooseFile(self):
         filename = QFileDialog.getOpenFileName(self,
                                                'Choose files',
                                                '/',
                                                'Data files(*.xlsx , *.xls , *.csv)')
-        self.label.setText(filename[0])
+        if filename[0] != '':
+            self.label.setText(filename[0])
+            self.pushButton_2.setEnabled(True)
 
     def onNext(self):
         self.stackedWidget.setCurrentIndex(1)
@@ -128,12 +137,16 @@ class Ui_ImportDialog(QDialog):
         self.checkBox_2.setText(_translate("Dialog", "CheckBox"))
         self.pushButton_2.setText(_translate("Dialog", "Next>>"))
         self.groupBox_3.setTitle(_translate("Dialog", "Info"))
+        self.label_3.setText(_translate("Dialog", "Choose a table you want to import"))
         self.pushButton_3.setText(_translate("Dialog", "OK"))
 
     @staticmethod
-    def getResult():
+    def getResult(table_names):
         dialog = Ui_ImportDialog()
+        dialog.comboBox.clear()
+        dialog.comboBox.addItems(table_names)
         result = dialog.exec_()
+        table_selected = ''
         if result:
-            pass
-        return result, 'info'
+            table_selected = dialog.comboBox.currentText()
+        return result, table_selected, dialog.label.Text()

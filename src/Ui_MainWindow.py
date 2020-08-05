@@ -138,7 +138,7 @@ class Ui_MainWindow(QMainWindow):
             self.showStatus("The passwords do not match, try again.")
 
     def onImport(self):
-        ok, info = Ui_ImportDialog.getResult()
+        ok, info = Ui_ImportDialog.getResult(self.operations.db.getTables())
 
     def onExport(self):
         ok, info = Ui_ExportDialog.getResult()

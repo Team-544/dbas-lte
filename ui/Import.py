@@ -82,13 +82,19 @@ class Ui_Dialog(object):
         self.groupBox_3 = QtWidgets.QGroupBox(self.page_2)
         self.groupBox_3.setGeometry(QtCore.QRect(20, 10, 621, 301))
         self.groupBox_3.setObjectName("groupBox_3")
+        self.comboBox = QtWidgets.QComboBox(self.groupBox_3)
+        self.comboBox.setGeometry(QtCore.QRect(280, 50, 211, 22))
+        self.comboBox.setObjectName("comboBox")
+        self.label_3 = QtWidgets.QLabel(self.groupBox_3)
+        self.label_3.setGeometry(QtCore.QRect(30, 50, 211, 16))
+        self.label_3.setObjectName("label_3")
         self.pushButton_3 = QtWidgets.QPushButton(self.page_2)
         self.pushButton_3.setGeometry(QtCore.QRect(570, 320, 75, 23))
         self.pushButton_3.setObjectName("pushButton_3")
         self.stackedWidget.addWidget(self.page_2)
 
         self.retranslateUi(Dialog)
-        self.stackedWidget.setCurrentIndex(1)
+        self.stackedWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
@@ -104,4 +110,5 @@ class Ui_Dialog(object):
         self.checkBox_2.setText(_translate("Dialog", "CheckBox"))
         self.pushButton_2.setText(_translate("Dialog", "Next>>"))
         self.groupBox_3.setTitle(_translate("Dialog", "Info"))
+        self.label_3.setText(_translate("Dialog", "Choose a table you want to import"))
         self.pushButton_3.setText(_translate("Dialog", "OK"))

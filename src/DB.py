@@ -31,6 +31,14 @@ class DatabaseManipulate:
                                         UID=username,
                                         PWD=password)
 
+    def getTables(self):
+        admin_cursor = self.__admin_cnxn.cursor()
+        admin_cursor.execute("SELECT NAME FROM SYSOBJECTS WHERE TYPE='U'")
+        table_names = list()
+        for tuple in admin_cursor.fetchall():
+            table_names.append(tuple[0])
+        return table_names
+
     def doSQL(self, sql):
         user_cursor = self.user_cnxn.cursor()
         user_cursor.execute(sql)
@@ -40,4 +48,5 @@ class DatabaseManipulate:
 
 if __name__ == '__main__':
     dbm = DatabaseManipulate()
-    dbm.signIn('123', '456')
+    for name in dbm.getTables():
+        print(name)
