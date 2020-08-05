@@ -10,9 +10,8 @@ class LogicCore:
         self.ui = ui
         try:
             self.db = DatabaseManipulate()
-        except pyodbc.InterfaceError:
+        except (pyodbc.InterfaceError, pyodbc.OperationalError):
             self.ui.showStatus("Failed to connect to database system.")
-
 
     def signIn(self, username, password):
         try:
