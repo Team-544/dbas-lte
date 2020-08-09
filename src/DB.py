@@ -4,7 +4,7 @@ import pyodbc
 class DatabaseManipulate:
     driver = 'ODBC Driver 17 for SQL Server'
     server = 'TWISTSURFACE\SQLEXPRESS'
-    database = 'TD_LTE_NET_CONF'
+    database = 'TD_LTE'
     admin_id = 'twist'
     admin_pwd = 'sql998541'
 
@@ -18,7 +18,7 @@ class DatabaseManipulate:
     def register(self, username, password):
         admin_cursor = self.__admin_cnxn.cursor()
         admin_cursor.execute(
-            "create login " + username + " with password='" + password + "', default_database=TD_LTE_NET_CONF")
+            "create login " + username + " with password='" + password + "', default_database=TD_LTE")
         admin_cursor.execute('create user ' + username + ' for login ' + username + ' with default_schema=dbo')
         admin_cursor.execute("exec sp_addrolemember 'db_datareader', '" + username + "'")
         admin_cursor.execute("exec sp_addrolemember 'db_datawriter', '" + username + "'")

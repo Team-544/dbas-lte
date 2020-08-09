@@ -6,79 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>754</width>
+    <height>491</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralwidget">
-   <widget class="QStackedWidget" name="stackedWidget">
-    <property name="geometry">
-     <rect>
-      <x>120</x>
-      <y>60</y>
-      <width>401</width>
-      <height>241</height>
-     </rect>
-    </property>
-    <property name="currentIndex">
-     <number>2</number>
-    </property>
-    <widget class="QWidget" name="page">
-     <widget class="QLabel" name="label">
-      <property name="geometry">
-       <rect>
-        <x>140</x>
-        <y>90</y>
-        <width>54</width>
-        <height>12</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>pg1</string>
-      </property>
-     </widget>
-    </widget>
-    <widget class="QWidget" name="page_2">
-     <widget class="QLabel" name="label_2">
-      <property name="geometry">
-       <rect>
-        <x>120</x>
-        <y>150</y>
-        <width>54</width>
-        <height>12</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>pg2</string>
-      </property>
-     </widget>
-    </widget>
-    <widget class="QWidget" name="page_3">
-     <widget class="QLabel" name="label_3">
-      <property name="geometry">
-       <rect>
-        <x>130</x>
-        <y>100</y>
-        <width>54</width>
-        <height>12</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>pg3</string>
-      </property>
-     </widget>
-    </widget>
-   </widget>
-  </widget>
+  <widget class="QWidget" name="centralwidget"/>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>754</width>
      <height>22</height>
     </rect>
    </property>
@@ -99,7 +40,14 @@
     <property name="title">
      <string>Tools</string>
     </property>
-    <addaction name="actionSearch"/>
+    <widget class="QMenu" name="menuSearch">
+     <property name="title">
+      <string>Search</string>
+     </property>
+     <addaction name="actionBy_cell_name_ID"/>
+     <addaction name="actionBy_eNodeB_name_ID"/>
+    </widget>
+    <addaction name="menuSearch"/>
     <addaction name="actionAnalyse"/>
    </widget>
    <addaction name="menuFile"/>
@@ -136,14 +84,19 @@
     <string>Exit</string>
    </property>
   </action>
-  <action name="actionSearch">
-   <property name="text">
-    <string>Search</string>
-   </property>
-  </action>
   <action name="actionAnalyse">
    <property name="text">
     <string>Analyse</string>
+   </property>
+  </action>
+  <action name="actionBy_cell_name_ID">
+   <property name="text">
+    <string>By cell name/ID</string>
+   </property>
+  </action>
+  <action name="actionBy_eNodeB_name_ID">
+   <property name="text">
+    <string>By eNodeB name/ID</string>
    </property>
   </action>
  </widget>
