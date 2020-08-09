@@ -149,4 +149,5 @@ class Ui_ImportDialog(QDialog):
         table_selected = ''
         if result:
             table_selected = dialog.comboBox.currentText()
-        return result, table_selected, dialog.label.Text()
+        return result, table_selected, dialog.label.text()  # path
+

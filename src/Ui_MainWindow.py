@@ -17,6 +17,7 @@ from src.LogicCore import LogicCore
 from src.Ui_ExportDialog import Ui_ExportDialog
 from src.Ui_ImportDialog import Ui_ImportDialog
 from src.Ui_RegisterDialog import Ui_RegisterDialog
+from src.Ui_ResultDialog import Ui_ResultDialog
 from src.Ui_SignInDialog import Ui_SignInDialog
 from src.Ui_LogOutDialog import Ui_LogOutDialog
 
@@ -110,6 +111,7 @@ class Ui_MainWindow(QMainWindow):
         self.actionRegister.triggered.connect(self.onRegister)
         self.actionImport.triggered.connect(self.onImport)
         self.actionExport.triggered.connect(self.onExport)
+        self.actionAnalyse.triggered.connect(self.onAnalyse)
 
         # Visual elements
         self.actionLog_out.setEnabled(False)
@@ -138,13 +140,18 @@ class Ui_MainWindow(QMainWindow):
             self.showStatus("The passwords do not match, try again.")
 
     def onImport(self):
-        ok, info = Ui_ImportDialog.getResult(self.operations.db.getTables())
+        ok, table, filename = Ui_ImportDialog.getResult(self.operations.db.getTables())
+        print(filename)
 
     def onExport(self):
-        ok, info = Ui_ExportDialog.getResult()
+        ok, table, filename = Ui_ExportDialog.getResult(self.operations.db.getTables())
 
     def onExit(self):
         qApp.quit()
+
+    def onAnalyse(self):
+        # for test
+        ok = Ui_ResultDialog.getResult(['1', '2', '3'], [('abc', 'def', 'ghi'), ('abc', 'def', 'ghi')])
 
     def showStatus(self, msg):
         if msg:
@@ -168,6 +175,7 @@ class Ui_MainWindow(QMainWindow):
         self.actionExit.setText(_translate("MainWindow", "Exit"))
         self.actionSearch.setText(_translate("MainWindow", "Search"))
         self.actionAnalyse.setText(_translate("MainWindow", "Analyse"))
+
 
 if __name__ == '__main__':
     QCoreApplication.setAttribute(Qt.AA_EnableHighDpiScaling)

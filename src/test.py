@@ -33,7 +33,10 @@ class Exception(QWidget):
 
 
 if __name__=='__main__':
-    pp=QApplication(sys.argv)
-    example=Exception()
-    #example.show()
-    sys.exit(pp.exec())
+    # pp=QApplication(sys.argv)
+    # example=Exception()
+    # #example.show()
+    # sys.exit(pp.exec())
+
+    a = [1, 3, 4, 4]
+    print(len(a))
