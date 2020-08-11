@@ -42,9 +42,9 @@
    <property name="geometry">
     <rect>
      <x>620</x>
-     <y>10</y>
+     <y>300</y>
      <width>81</width>
-     <height>471</height>
+     <height>181</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -58,7 +58,7 @@
     <item>
      <widget class="QPushButton" name="pushButton_2">
       <property name="text">
-       <string>PushButton</string>
+       <string>Analyse</string>
       </property>
      </widget>
     </item>

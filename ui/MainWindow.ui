@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>754</width>
-    <height>491</height>
+    <width>408</width>
+    <height>317</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>754</width>
+     <width>408</width>
      <height>22</height>
     </rect>
    </property>
@@ -46,6 +46,7 @@
      </property>
      <addaction name="actionBy_cell_name_ID"/>
      <addaction name="actionBy_eNodeB_name_ID"/>
+     <addaction name="actionOverlapping_interference_triples"/>
     </widget>
     <widget class="QMenu" name="menuAnalyse">
      <property name="title">
@@ -53,6 +54,7 @@
      </property>
      <addaction name="actionKPI_indicator_diagram"/>
      <addaction name="actionPRB_information_diagram"/>
+     <addaction name="actionC2I_Analyse"/>
     </widget>
     <addaction name="menuSearch"/>
     <addaction name="menuAnalyse"/>
@@ -67,6 +69,9 @@
    </property>
   </action>
   <action name="actionLog_out">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Log out</string>
    </property>
@@ -109,6 +114,16 @@
   <action name="actionPRB_information_diagram">
    <property name="text">
     <string>PRB information diagram</string>
+   </property>
+  </action>
+  <action name="actionC2I_Analyse">
+   <property name="text">
+    <string>C2I Analyse</string>
+   </property>
+  </action>
+  <action name="actionOverlapping_interference_triples">
+   <property name="text">
+    <string>Overlapping interference triples</string>
    </property>
   </action>
  </widget>

@@ -14,12 +14,14 @@ from PyQt5.QtCore import QCoreApplication, Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, qApp, QFileDialog
 
 from src.LogicCore import LogicCore
+from src.Ui_C2IDialog import Ui_C2IDialog
 from src.Ui_CellDialog import Ui_CellDialog
 from src.Ui_ENodeBDialog import Ui_ENodeBDialog
 from src.Ui_ExportDialog import Ui_ExportDialog
 from src.Ui_ImportDialog import Ui_ImportDialog
 from src.Ui_KPIDialog import Ui_KPIDialog
 from src.Ui_PRBDialog import Ui_PRBDialog
+from src.Ui_RatioSetDialog import Ui_RatioSetDialog
 from src.Ui_RegisterDialog import Ui_RegisterDialog
 from src.Ui_ResultDialog import Ui_ResultDialog
 from src.Ui_SignInDialog import Ui_SignInDialog
@@ -37,12 +39,12 @@ class Ui_MainWindow(QMainWindow):
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(754, 491)
+        MainWindow.resize(408, 317)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 754, 22))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 408, 22))
         self.menubar.setObjectName("menubar")
         self.menuFile = QtWidgets.QMenu(self.menubar)
         self.menuFile.setObjectName("menuFile")
@@ -59,6 +61,7 @@ class Ui_MainWindow(QMainWindow):
         self.actionSign_in = QtWidgets.QAction(MainWindow)
         self.actionSign_in.setObjectName("actionSign_in")
         self.actionLog_out = QtWidgets.QAction(MainWindow)
+        self.actionLog_out.setEnabled(False)
         self.actionLog_out.setObjectName("actionLog_out")
         self.actionRegister = QtWidgets.QAction(MainWindow)
         self.actionRegister.setObjectName("actionRegister")
@@ -76,6 +79,10 @@ class Ui_MainWindow(QMainWindow):
         self.actionKPI_indicator_diagram.setObjectName("actionKPI_indicator_diagram")
         self.actionPRB_information_diagram = QtWidgets.QAction(MainWindow)
         self.actionPRB_information_diagram.setObjectName("actionPRB_information_diagram")
+        self.actionC2I_Analyse = QtWidgets.QAction(MainWindow)
+        self.actionC2I_Analyse.setObjectName("actionC2I_Analyse")
+        self.actionOverlapping_interference_triples = QtWidgets.QAction(MainWindow)
+        self.actionOverlapping_interference_triples.setObjectName("actionOverlapping_interference_triples")
         self.menuFile.addAction(self.actionSign_in)
         self.menuFile.addAction(self.actionLog_out)
         self.menuFile.addAction(self.actionRegister)
@@ -86,8 +93,10 @@ class Ui_MainWindow(QMainWindow):
         self.menuFile.addAction(self.actionExit)
         self.menuSearch.addAction(self.actionBy_cell_name_ID)
         self.menuSearch.addAction(self.actionBy_eNodeB_name_ID)
+        self.menuSearch.addAction(self.actionOverlapping_interference_triples)
         self.menuAnalyse.addAction(self.actionKPI_indicator_diagram)
         self.menuAnalyse.addAction(self.actionPRB_information_diagram)
+        self.menuAnalyse.addAction(self.actionC2I_Analyse)
         self.menuTools.addAction(self.menuSearch.menuAction())
         self.menuTools.addAction(self.menuAnalyse.menuAction())
         self.menubar.addAction(self.menuFile.menuAction())
@@ -113,6 +122,8 @@ class Ui_MainWindow(QMainWindow):
         self.actionBy_eNodeB_name_ID.setText(_translate("MainWindow", "By eNodeB name/ID"))
         self.actionKPI_indicator_diagram.setText(_translate("MainWindow", "KPI indicator diagram"))
         self.actionPRB_information_diagram.setText(_translate("MainWindow", "PRB information diagram"))
+        self.actionC2I_Analyse.setText(_translate("MainWindow", "C2I Analyse"))
+        self.actionOverlapping_interference_triples.setText(_translate("MainWindow", "Overlapping interference triples"))
 
     def init(self):
         self.menubar.setNativeMenuBar(False)
@@ -128,6 +139,8 @@ class Ui_MainWindow(QMainWindow):
         self.actionBy_eNodeB_name_ID.triggered.connect(self.onSearchENodeB)
         self.actionKPI_indicator_diagram.triggered.connect(self.onKPI)
         self.actionPRB_information_diagram.triggered.connect(self.onPRB)
+        self.actionC2I_Analyse.triggered.connect(self.onC2IAnalyse)
+        self.actionOverlapping_interference_triples.triggered.connect(self.onTriples)
 
         # Visual elements
         self.actionLog_out.setEnabled(False)
@@ -158,7 +171,7 @@ class Ui_MainWindow(QMainWindow):
     def onImport(self):
         ok, table, filename = Ui_ImportDialog.getResult(self.operations.db.getTables())
         if ok:
-            self.operations.data_import('.xlsx', filename, table)
+            self.operations.data_import('xlsx', filename, table)
 
     def onExport(self):
         ok, table, filename = Ui_ExportDialog.getResult(self.operations.db.getTables())
@@ -171,12 +184,14 @@ class Ui_MainWindow(QMainWindow):
     def onKPI(self):
         attrs = self.operations.db.getTbCols('tbKPI')
         NE_names = self.operations.db.getNENames('tbKPI')
-        ok, start_time, end_time, ne, attr = Ui_KPIDialog.getResult(attrs, NE_names)
-        if ok:
-            date, attributes = self.operations.search_KPI(ne, start_time, end_time, attr)
-            Visualization.showPlot(date, attributes, 'Time', attr, attr + '-Time Diagram')
-        else:
-            self.showStatus('Some thing wrong.')
+
+        # ok, start_time, end_time, ne, attr = Ui_KPIDialog.getResult(attrs, NE_names)
+        # if ok:
+        #     date, attributes = self.operations.search_KPI(ne, start_time, end_time, attr)
+        attr=''
+        Visualization.showPlot(['2016-07-17 00:00:00', '2016-07-18 00:00:00', '2016-07-19 00:00:00'], [0.001, 0.002, 0.004], 'Time', attr, attr + '-Time Diagram')
+        # else:
+        #     self.showStatus('Some thing wrong.')
 
     def onPRB(self):
         attrs = self.operations.db.getTbCols('tbPRB')
@@ -184,7 +199,7 @@ class Ui_MainWindow(QMainWindow):
         ok, start_time, end_time, ne, attr = Ui_PRBDialog.getResult(attrs, NE_names)
         if ok:
             date, attributes = self.operations.search_PRB(ne, start_time, end_time, attr)
-            Visualization.showPlot(date, attributes, 'Time', attr, attr + '-Time Diagram')
+            Visualization.showPlot(['2016-07-17 00:00:00', '2016-07-18 00:00:00', '2016-07-19 00:00:00'], [0.001, 0.002, 0.004], 'Time', attr, attr + '-Time Diagram')
         else:
             self.showStatus('Some thing wrong.')
 
@@ -205,6 +220,20 @@ class Ui_MainWindow(QMainWindow):
         if ok:
             cols = self.operations.db.getTbCols('tbCell')
             ok = Ui_ResultDialog.getResult(cols, lines)
+
+    def onC2IAnalyse(self):
+        try:
+            Ui_C2IDialog.getResult(self.operations,
+                                   self.operations.db.getCellInC2I('SCELL'),
+                                   self.operations.db.getCellInC2I('NCELL'))
+        except BaseException as e:
+            print(e.args)
+
+    def onTriples(self):
+        ok, ratio = Ui_RatioSetDialog.getResult()
+        if ok:
+            result = self.operations.db.trigroup_search(ratio)
+            Ui_ResultDialog.getResult(['CELL1', 'CELL2', 'CELL3'], result)
 
     def showStatus(self, msg):
         if msg:

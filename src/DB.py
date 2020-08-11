@@ -59,6 +59,14 @@ class DatabaseManipulate:
             eNodeBs.append(tuple[1])
         return eNodeBs
 
+    def getCellInC2I(self, col_name):
+        admin_cursor = self.__admin_cnxn.cursor()
+        admin_cursor.execute("SELECT DISTINCT %s FROM tbC2I" % col_name)
+        cells = list()
+        for tuple in admin_cursor.fetchall():
+            cells.append(tuple[0])
+        return cells
+
     def getNENames(self, tb_name):
         admin_cursor = self.__admin_cnxn.cursor()
         admin_cursor.execute("SELECT DISTINCT [网元名称] FROM %s" % tb_name)

@@ -557,6 +557,71 @@ class LogicCore:
             attribute[i] = result[i][col]
         return date, attribute
 
+    # 主邻小区C2I干扰分析
+    def C2I_interrupt_analysis(self, SCELL, NCELL):  # SCELL——主小区ID；NCELL——邻小区ID
+        data = {'C2I_Mean': '', 'std': '', 'PrbC2I9': '', 'PrbABS6': ''}
+        cursor = connect.cnxn.cursor()
+        cursor.execute('delete from tbC2Inew')
+        connect.cnxn.commit()
+        cursor = connect.cnxn.cursor()
+        cursor.execute('exec storeInC2I ?', messure_std)  # 这里注意要传入用于筛选的参数
+        connect.cnxn.commit()
+        cursor = connect.cnxn.cursor()
+        cursor.execute('select * from tbC2Inew where SCELL=? and NCELL=?', (SCELL, NCELL))
+        result = cursor.fetchall()
+        if len(result) != 0:
+            mean = result[0][2]
+            std = result[0][3]
+            PRB9 = st.norm.cdf(9, loc=mean, scale=std)
+            PRB6 = st.norm.cdf(6, loc=mean, scale=std) - st.norm.cdf(-6, loc=mean, scale=std)
+            data['C2I_Mean'] = mean
+            data['std'] = std
+            data['PrbC2I9'] = PRB9
+            data['PrbABS6'] = PRB6
+        return data
+
+    # 查询重叠覆盖干扰三元组
+    def trigroup_search(self, value):  # value——查询的基准
+        if str(value).count('.') == 1:
+            num_left = int(value)
+            num_right = value - int(value)
+            if num_left != '0' or not (num_right.isdigit()):
+                print('输入的数字应为0~1之间的小数！')
+                # TODO：错误处理
+        else:
+            print('输入的数字应为0~1之间的小数！')
+            # TODO：错误处理
+        cursor = connect.cnxn.cursor()
+        cursor.execute('delete from tbC2I3')
+        connect.cnxn.commit()
+        cursor = connect.cnxn.cursor()
+        cursor.execute('delete from tbC2Inew')
+        connect.cnxn.commit()
+        cursor = connect.cnxn.cursor()
+        cursor.execute('exec storeInC2I ?', messure_std)
+        connect.cnxn.commit()
+        cursor = connect.cnxn.cursor()
+        cursor.execute('select SCELL, NCELL, C2I_Mean, std from tbC2Inew')
+        result = cursor.fetchall()
+        print(result)
+        for i in range(len(result)):
+            SCELL = result[i][0]  # SCELL
+            NCELL = result[i][1]  # NCELL
+            if result[i][3] != 0:  # std
+                PRB9 = st.norm.cdf(9, loc=result[i][2], scale=result[i][3])
+                PRB6 = st.norm.cdf(6, loc=result[i][2], scale=result[i][3])
+            else:
+                PRB9 = 0
+                PRB6 = 0
+            cursor.execute('update tbC2Inew set PrbC2I9=?, PrbABS6=? where SCELL=? and NCELL=?', (PRB9, PRB6, SCELL, NCELL))
+            connect.cnxn.commit()
+        cursor = connect.cnxn.cursor()
+        cursor.execute('exec insertTBC2I3 ?', value)
+        connect.cnxn.commit()
+        cursor = connect.cnxn.cursor()
+        cursor.execute('select * from tbC2I3')
+        result = cursor.fetchall()
+        return result
 
 if __name__ == '__main__':
     lc = LogicCore()
