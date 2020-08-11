@@ -1,7 +1,8 @@
+import datetime
 from time import sleep
 
 import pyodbc
-
+import pandas as pd
 from src.DB import DatabaseManipulate
 
 import connect  # 用于数据库的连接
@@ -21,18 +22,18 @@ partition = 20  # 将数据以50行为一组写入
 
 
 class LogicCore:
-    # def __init__(self, ui):
-    #     self.ui = ui
-    #     try:
-    #         self.db = DatabaseManipulate()
-    #     except (pyodbc.InterfaceError, pyodbc.OperationalError):
-    #         self.ui.showStatus("Failed to connect to database system.")
+    def __init__(self, ui):
+        self.ui = ui
+        try:
+            self.db = DatabaseManipulate()
+        except (pyodbc.InterfaceError, pyodbc.OperationalError):
+            self.ui.showStatus("Failed to connect to database system.")
 
     def signIn(self, username, password):
         try:
             self.db.signIn(username, password)
             return True
-        except pyodbc.InterfaceError :
+        except pyodbc.InterfaceError:
             self.ui.showStatus("Wrong user name or password.")
             return False
 
@@ -90,7 +91,11 @@ class LogicCore:
 
                     while i < partition and row < num:
                         item = table.row_values(row)
-                        err = [1, 5, 6, 8, 9, 11, 12, 15, 16, 17, 19, 20, 21, 22, 23, 24, 25, 26, 32, 33, 34] + [i for i in range(36, 42)]
+                        err = [1, 5, 6, 8, 9, 11, 12, 15, 16, 17, 19, 20, 21, 22, 23, 24, 25, 26, 32, 33, 34] + [i for i
+                                                                                                                 in
+                                                                                                                 range(
+                                                                                                                     36,
+                                                                                                                     42)]
                         for num in err:
                             item[num] = int(item[num])
 
@@ -99,7 +104,8 @@ class LogicCore:
                         row += 1
                     InputBuffer.close()
                     cursor = connect.cnxn.cursor()
-                    cursor.execute("bulk insert tbKPI from '%s' with (FIELDTERMINATOR =',', FIRE_TRIGGERS);" % test_addr)
+                    cursor.execute(
+                        "bulk insert tbKPI from '%s' with (FIELDTERMINATOR =',', FIRE_TRIGGERS);" % test_addr)
                     connect.cnxn.commit()
             elif file_name == 'tbPRB':
                 row = 1
@@ -114,7 +120,8 @@ class LogicCore:
                         row += 1
                     InputBuffer.close()
                     cursor = connect.cnxn.cursor()
-                    cursor.execute("bulk insert tbPRB from '%s' with (FIELDTERMINATOR =',', FIRE_TRIGGERS);" % test_addr)
+                    cursor.execute(
+                        "bulk insert tbPRB from '%s' with (FIELDTERMINATOR =',', FIRE_TRIGGERS);" % test_addr)
                     connect.cnxn.commit()
             elif file_name == 'tbPMROData':
                 row = 1
@@ -129,7 +136,8 @@ class LogicCore:
                         row += 1
                     InputBuffer.close()
                     cursor = connect.cnxn.cursor()
-                    cursor.execute("bulk insert tbPMROData from '%s' with (FIELDTERMINATOR =',', FIRE_TRIGGERS);" % test_addr)
+                    cursor.execute(
+                        "bulk insert tbPMROData from '%s' with (FIELDTERMINATOR =',', FIRE_TRIGGERS);" % test_addr)
                     connect.cnxn.commit()
         elif type == '.csv':
             with open(file_path, 'w') as data:
@@ -343,9 +351,9 @@ class LogicCore:
             # 根据横纵坐标依次录入查询到的信息值
             row = 1
             col = 0
-            for row in range(1, len(table)+1):
+            for row in range(1, len(table) + 1):
                 for col in range(0, len(field_list)):
-                    sheet.write(row, col, u'%s' % table[row-1][col])
+                    sheet.write(row, col, u'%s' % table[row - 1][col])
             sheet_time = datetime.datetime.now()
             book_mark = sheet_time.strftime('%Y%m%d')
             workbook.save(path)
@@ -467,8 +475,64 @@ class LogicCore:
             connect.cnxn.commit()
             print("导出成功！")
 
+    def data_wash_tbMROData(self, file_path, save_path):
+        f = open(file_path)
+        MROData = pd.read_csv(f)
+        MROData.drop_duplicates(subset=['TimeStamp', 'ServingSector', 'InterferingSector'], keep='first', inplace=True)
+        MROData.to_csv(save_path, index=None)
+
+    # 小区配置信息查询
+    def search_tbCell(self, info):  # info——查询的依据,可能为中文（小区名称CellName）或者英文（Cell_ID）
+        cursor = connect.cnxn.cursor()
+        zhmodel = re.compile(u'[\u4e00-\u9fa5]')
+        re.match = zhmodel.search(str(info))
+        if re.match:  # 查询的内容中含有中文，用SECTOR_NAME查询
+            cursor.execute('select * from tbCell where SECTOR_NAME = ?', info)
+        else:  # 查询的内容中不含中文，用SECTOR_ID查询
+            cursor.execute('select * from tbCell where SECTOR_ID = ?', info)
+        result = cursor.fetchall()
+        """
+        cursor.execute('select name from syscolumns where id=object_id('tbCell')')
+        col = cursor.fetchall()
+        reuslt = col + result
+        """
+        return result
+
+    # 基站eNodeB信息查询
+    def search_eNodeB(self, info):  # info——查询的依据,可能为中文（小区名称eNodeBName）或者英文（eNodeBID）
+        cursor = connect.cnxn.cursor()
+        zhmodel = re.compile(u'[\u4e00-\u9fa5]')
+        re.match = zhmodel.search(str(info))
+        if re.match:  # 查询的内容中含有中文，用ENODEB_NAME查询
+            cursor.execute('select * from tbCell where ENODEB_NAME = ?', info)
+        else:  # 查询的内容中不含中文，用ENODEB_ID查询
+            cursor.execute('select * from tbCell where ENODEBID = ?', info)
+        result = cursor.fetchall()
+        return result
+
+    # KPI指标查询
+    def search_KPI(self, info, start, end, attr):  # info——网元名称, start——起始时间， end——终止时间
+        start = start + (' 00:00:00')
+        start = datetime.datetime.strptime(start, '%Y-%m-%d %H:%M:%S')
+        start = start.strftime('%m/%d/%Y %H:%M:%S')
+        end = end + (' 00:00:00')
+        end = datetime.datetime.strptime(end, '%Y-%m-%d %H:%M:%S')
+        end = end.strftime('%m/%d/%Y %H:%M:%S')
+        cursor = connect.cnxn.cursor()
+        cursor.execute('select ? from tbKPI where 网元名称 = ? and 起始时间 between ? and ?', (attr, info, start, end))
+        result = cursor.fetchall()
+        length = len(result)
+        date = [''] * int(length)
+        attribute = [''] * int(length)
+        cursor.execute('') #TODO:查列表名称
+        columns = cursor.fetchall()
+        col = columns.index(attr)
+        for i in range(length):
+            date[i] = str(result[i][0])
+            attribute[i] = result[i][col]
+        return date, attribute
 
 if __name__ == '__main__':
     lc = LogicCore()
     # lc.data_import('.xlsx', 'C:/Workspace/学习/数据库课程设计/数据库系统原理课程设计/4-1. 三门峡地区TD-LTE网络数据/1.tbCell.xlsx', 'tbCell')
-    lc.data_export('.txt', 'C:/TD-LTE/tbcell.txt', 'tbCell')
+    # lc.data_export('.txt', 'C:/TD-LTE/tbcell.txt', 'tbCell')

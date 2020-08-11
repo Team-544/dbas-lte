@@ -16,7 +16,7 @@ class Ui_ENodeBDialog(QDialog):
     def __init__(self):
         super(Ui_ENodeBDialog, self).__init__()
         self.setupUi(self)
-        self.init(self)
+        # self.init(self)
 
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
@@ -27,7 +27,7 @@ class Ui_ENodeBDialog(QDialog):
         self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok)
         self.buttonBox.setObjectName("buttonBox")
         self.comboBox = QtWidgets.QComboBox(Dialog)
-        self.comboBox.setGeometry(QtCore.QRect(20, 50, 67, 22))
+        self.comboBox.setGeometry(QtCore.QRect(20, 50, 151, 22))
         self.comboBox.setObjectName("comboBox")
         self.label = QtWidgets.QLabel(Dialog)
         self.label.setGeometry(QtCore.QRect(20, 20, 291, 16))

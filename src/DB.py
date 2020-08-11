@@ -39,6 +39,40 @@ class DatabaseManipulate:
             table_names.append(tuple[0])
         return table_names
 
+    def getCells(self):
+        admin_cursor = self.__admin_cnxn.cursor()
+        admin_cursor.execute("SELECT DISTINCT SECTOR_ID, SECTOR_NAME FROM tbCell")
+        cells = list()
+        for tuple in admin_cursor.fetchall():
+            cells.append(tuple[0])
+            cells.append(tuple[1])
+        return cells
+
+    def getENodeBs(self):
+        admin_cursor = self.__admin_cnxn.cursor()
+        admin_cursor.execute("SELECT DISTINCT ENODEBID, ENODEB_NAME FROM tbCell")
+        eNodeBs = list()
+        for tuple in admin_cursor.fetchall():
+            eNodeBs.append(str(tuple[0]))
+            eNodeBs.append(tuple[1])
+        return eNodeBs
+
+    def getNENames(self, tb_name):
+        admin_cursor = self.__admin_cnxn.cursor()
+        admin_cursor.execute("SELECT DISTINCT [网元名称] FROM %s" % tb_name)
+        NE_names = list()
+        for tuple in admin_cursor.fetchall():
+            NE_names.append(tuple[0])
+        return NE_names
+
+    def getTbCols(self, tb_name):
+        admin_cursor = self.__admin_cnxn.cursor()
+        admin_cursor.execute("select name from syscolumns where id=object_id('%s')" % tb_name)
+        cols = list()
+        for tuple in admin_cursor.fetchall():
+            cols.append(tuple[0])
+        return cols
+
     def doSQL(self, sql):
         user_cursor = self.user_cnxn.cursor()
         user_cursor.execute(sql)
@@ -48,5 +82,5 @@ class DatabaseManipulate:
 
 if __name__ == '__main__':
     dbm = DatabaseManipulate()
-    for name in dbm.getTables():
+    for name in dbm.getENodeB():
         print(name)

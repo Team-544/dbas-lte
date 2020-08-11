@@ -22,14 +22,15 @@
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Twist\Documents\GitHub\dbas-lte\src" />
+      <recent name="C:\Users\Twist\PycharmProjects\TDLTE_DBAS\src" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Twist\Documents\GitHub\dbas-lte\src" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\Twist\PycharmProjects\TDLTE_DBAS\src" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -44,7 +45,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.LogicCore">
+  <component name="RunManager" selected="Python.main">
     <configuration name="DB" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="TDLTE_DBAS" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -66,7 +67,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="LogicCore" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="Ui_CellDialog" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="TDLTE_DBAS" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -78,7 +79,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/LogicCore.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/Ui_CellDialog.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -87,7 +88,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Ui_MainWindow" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="Ui_DateTimeSelectDialog" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="TDLTE_DBAS" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -99,7 +100,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/Ui_MainWindow.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/Ui_DateTimeSelectDialog.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -108,7 +109,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Ui_ResultDialog" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="Visualization" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="TDLTE_DBAS" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -120,7 +121,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/Ui_ResultDialog.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/Visualization.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -152,11 +153,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.LogicCore" />
         <item itemvalue="Python.main" />
-        <item itemvalue="Python.Ui_ResultDialog" />
+        <item itemvalue="Python.Visualization" />
+        <item itemvalue="Python.Ui_DateTimeSelectDialog" />
+        <item itemvalue="Python.Ui_CellDialog" />
         <item itemvalue="Python.DB" />
-        <item itemvalue="Python.Ui_MainWindow" />
       </list>
     </recent_temporary>
   </component>

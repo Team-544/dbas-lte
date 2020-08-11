@@ -47,8 +47,15 @@
      <addaction name="actionBy_cell_name_ID"/>
      <addaction name="actionBy_eNodeB_name_ID"/>
     </widget>
+    <widget class="QMenu" name="menuAnalyse">
+     <property name="title">
+      <string>Analyse</string>
+     </property>
+     <addaction name="actionKPI_indicator_diagram"/>
+     <addaction name="actionPRB_information_diagram"/>
+    </widget>
     <addaction name="menuSearch"/>
-    <addaction name="actionAnalyse"/>
+    <addaction name="menuAnalyse"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuTools"/>
@@ -84,11 +91,6 @@
     <string>Exit</string>
    </property>
   </action>
-  <action name="actionAnalyse">
-   <property name="text">
-    <string>Analyse</string>
-   </property>
-  </action>
   <action name="actionBy_cell_name_ID">
    <property name="text">
     <string>By cell name/ID</string>
@@ -97,6 +99,16 @@
   <action name="actionBy_eNodeB_name_ID">
    <property name="text">
     <string>By eNodeB name/ID</string>
+   </property>
+  </action>
+  <action name="actionKPI_indicator_diagram">
+   <property name="text">
+    <string>KPI indicator diagram</string>
+   </property>
+  </action>
+  <action name="actionPRB_information_diagram">
+   <property name="text">
+    <string>PRB information diagram</string>
    </property>
   </action>
  </widget>

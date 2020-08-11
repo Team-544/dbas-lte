@@ -21,7 +21,7 @@ class Ui_Dialog(object):
         self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok)
         self.buttonBox.setObjectName("buttonBox")
         self.comboBox = QtWidgets.QComboBox(Dialog)
-        self.comboBox.setGeometry(QtCore.QRect(20, 50, 67, 22))
+        self.comboBox.setGeometry(QtCore.QRect(20, 50, 151, 22))
         self.comboBox.setObjectName("comboBox")
         self.label = QtWidgets.QLabel(Dialog)
         self.label.setGeometry(QtCore.QRect(20, 20, 291, 16))

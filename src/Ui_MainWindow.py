@@ -14,12 +14,16 @@ from PyQt5.QtCore import QCoreApplication, Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, qApp, QFileDialog
 
 from src.LogicCore import LogicCore
+from src.Ui_CellDialog import Ui_CellDialog
+from src.Ui_ENodeBDialog import Ui_ENodeBDialog
 from src.Ui_ExportDialog import Ui_ExportDialog
 from src.Ui_ImportDialog import Ui_ImportDialog
+from src.Ui_KPIDialog import Ui_KPIDialog
 from src.Ui_RegisterDialog import Ui_RegisterDialog
 from src.Ui_ResultDialog import Ui_ResultDialog
 from src.Ui_SignInDialog import Ui_SignInDialog
 from src.Ui_LogOutDialog import Ui_LogOutDialog
+from src.Visualization import Visualization
 
 
 class Ui_MainWindow(QMainWindow):
@@ -45,6 +49,8 @@ class Ui_MainWindow(QMainWindow):
         self.menuTools.setObjectName("menuTools")
         self.menuSearch = QtWidgets.QMenu(self.menuTools)
         self.menuSearch.setObjectName("menuSearch")
+        self.menuAnalyse = QtWidgets.QMenu(self.menuTools)
+        self.menuAnalyse.setObjectName("menuAnalyse")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -61,12 +67,14 @@ class Ui_MainWindow(QMainWindow):
         self.actionExport.setObjectName("actionExport")
         self.actionExit = QtWidgets.QAction(MainWindow)
         self.actionExit.setObjectName("actionExit")
-        self.actionAnalyse = QtWidgets.QAction(MainWindow)
-        self.actionAnalyse.setObjectName("actionAnalyse")
         self.actionBy_cell_name_ID = QtWidgets.QAction(MainWindow)
         self.actionBy_cell_name_ID.setObjectName("actionBy_cell_name_ID")
         self.actionBy_eNodeB_name_ID = QtWidgets.QAction(MainWindow)
         self.actionBy_eNodeB_name_ID.setObjectName("actionBy_eNodeB_name_ID")
+        self.actionKPI_indicator_diagram = QtWidgets.QAction(MainWindow)
+        self.actionKPI_indicator_diagram.setObjectName("actionKPI_indicator_diagram")
+        self.actionPRB_information_diagram = QtWidgets.QAction(MainWindow)
+        self.actionPRB_information_diagram.setObjectName("actionPRB_information_diagram")
         self.menuFile.addAction(self.actionSign_in)
         self.menuFile.addAction(self.actionLog_out)
         self.menuFile.addAction(self.actionRegister)
@@ -77,13 +85,33 @@ class Ui_MainWindow(QMainWindow):
         self.menuFile.addAction(self.actionExit)
         self.menuSearch.addAction(self.actionBy_cell_name_ID)
         self.menuSearch.addAction(self.actionBy_eNodeB_name_ID)
+        self.menuAnalyse.addAction(self.actionKPI_indicator_diagram)
+        self.menuAnalyse.addAction(self.actionPRB_information_diagram)
         self.menuTools.addAction(self.menuSearch.menuAction())
-        self.menuTools.addAction(self.actionAnalyse)
+        self.menuTools.addAction(self.menuAnalyse.menuAction())
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuTools.menuAction())
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+    def retranslateUi(self, MainWindow):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.menuFile.setTitle(_translate("MainWindow", "File"))
+        self.menuTools.setTitle(_translate("MainWindow", "Tools"))
+        self.menuSearch.setTitle(_translate("MainWindow", "Search"))
+        self.menuAnalyse.setTitle(_translate("MainWindow", "Analyse"))
+        self.actionSign_in.setText(_translate("MainWindow", "Sign in"))
+        self.actionLog_out.setText(_translate("MainWindow", "Log out"))
+        self.actionRegister.setText(_translate("MainWindow", "Register"))
+        self.actionImport.setText(_translate("MainWindow", "Import..."))
+        self.actionExport.setText(_translate("MainWindow", "Export..."))
+        self.actionExit.setText(_translate("MainWindow", "Exit"))
+        self.actionBy_cell_name_ID.setText(_translate("MainWindow", "By cell name/ID"))
+        self.actionBy_eNodeB_name_ID.setText(_translate("MainWindow", "By eNodeB name/ID"))
+        self.actionKPI_indicator_diagram.setText(_translate("MainWindow", "KPI indicator diagram"))
+        self.actionPRB_information_diagram.setText(_translate("MainWindow", "PRB information diagram"))
 
     def init(self):
         self.menubar.setNativeMenuBar(False)
@@ -95,7 +123,9 @@ class Ui_MainWindow(QMainWindow):
         self.actionRegister.triggered.connect(self.onRegister)
         self.actionImport.triggered.connect(self.onImport)
         self.actionExport.triggered.connect(self.onExport)
-        self.actionAnalyse.triggered.connect(self.onAnalyse)
+        self.actionBy_cell_name_ID.triggered.connect(self.onSearchCell)
+        self.actionBy_eNodeB_name_ID.triggered.connect(self.onSearchENodeB)
+        self.actionKPI_indicator_diagram.triggered.connect(self.onKPI)
 
         # Visual elements
         self.actionLog_out.setEnabled(False)
@@ -125,43 +155,54 @@ class Ui_MainWindow(QMainWindow):
 
     def onImport(self):
         ok, table, filename = Ui_ImportDialog.getResult(self.operations.db.getTables())
-        print(table)
-        print(filename)
         if ok:
             self.operations.data_import('.xlsx', filename, table)
-        print(filename)
 
     def onExport(self):
         ok, table, filename = Ui_ExportDialog.getResult(self.operations.db.getTables())
+        if ok:
+            self.operations.data_export(str.split(filename, '.'), filename, table)
 
     def onExit(self):
         qApp.quit()
 
+    def onKPI(self):
+        attrs = self.operations.db.getTbCols('tbKPI')[5:]
+        NE_names = self.operations.db.getNENames('tbKPI')
+        ok, start_time, end_time, ne, attr = Ui_KPIDialog.getResult(attrs, NE_names)
+        if ok:
+            date, attributes = self.operations.search_KPI(ne, start_time, end_time, attr)
+            Visualization.showPlot(date, attributes, 'Time', attr, attr + '-Time Diagram')
+        else:
+            self.showStatus('Some thing wrong.')
+
+    def onPRB(self):
+        attrs = self.operations.db.getTbCols('tbPRB')
+        NE_names = self.operations.db.getNENames('tbPRB')
+
     def onAnalyse(self):
         # for test
         ok = Ui_ResultDialog.getResult(['1', '2', '3'], [('abc', 'def', 'ghi'), ('abc', 'def', 'ghi')])
+
+    def onSearchCell(self):
+        ok, cell = Ui_CellDialog.getResult(self.operations.db.getCells())
+        lines = self.operations.search_tbCell(cell)
+        if ok:
+            cols = self.operations.db.getTbCols('tbCell')
+            ok = Ui_ResultDialog.getResult(cols, lines)
+
+    def onSearchENodeB(self):
+        ok, eNodeB = Ui_ENodeBDialog.getResult(self.operations.db.getENodeBs())
+        lines = self.operations.search_eNodeB(eNodeB)
+        if ok:
+            cols = self.operations.db.getTbCols('tbCell')
+            ok = Ui_ResultDialog.getResult(cols, lines)
 
     def showStatus(self, msg):
         if msg:
             self.statusBar().showMessage(msg)
         else:
             self.statusBar().showMessage('ERR')
-
-    def retranslateUi(self, MainWindow):
-        _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.menuFile.setTitle(_translate("MainWindow", "File"))
-        self.menuTools.setTitle(_translate("MainWindow", "Tools"))
-        self.menuSearch.setTitle(_translate("MainWindow", "Search"))
-        self.actionSign_in.setText(_translate("MainWindow", "Sign in"))
-        self.actionLog_out.setText(_translate("MainWindow", "Log out"))
-        self.actionRegister.setText(_translate("MainWindow", "Register"))
-        self.actionImport.setText(_translate("MainWindow", "Import..."))
-        self.actionExport.setText(_translate("MainWindow", "Export..."))
-        self.actionExit.setText(_translate("MainWindow", "Exit"))
-        self.actionAnalyse.setText(_translate("MainWindow", "Analyse"))
-        self.actionBy_cell_name_ID.setText(_translate("MainWindow", "By cell name/ID"))
-        self.actionBy_eNodeB_name_ID.setText(_translate("MainWindow", "By eNodeB name/ID"))
 
 
 if __name__ == '__main__':

@@ -80,7 +80,7 @@ class Ui_ResultDialog(QDialog):
     def getResult(columns, records):
         dialog = Ui_ResultDialog()
         dialog.tableWidget.clear()
-
+        dialog.tableWidget.setColumnCount(len(columns))
         dialog.tableWidget.setHorizontalHeaderLabels(columns)
         row_count = dialog.tableWidget.rowCount()
         for record in records:
