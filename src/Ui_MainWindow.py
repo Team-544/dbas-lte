@@ -19,6 +19,7 @@ from src.Ui_ENodeBDialog import Ui_ENodeBDialog
 from src.Ui_ExportDialog import Ui_ExportDialog
 from src.Ui_ImportDialog import Ui_ImportDialog
 from src.Ui_KPIDialog import Ui_KPIDialog
+from src.Ui_PRBDialog import Ui_PRBDialog
 from src.Ui_RegisterDialog import Ui_RegisterDialog
 from src.Ui_ResultDialog import Ui_ResultDialog
 from src.Ui_SignInDialog import Ui_SignInDialog
@@ -126,6 +127,7 @@ class Ui_MainWindow(QMainWindow):
         self.actionBy_cell_name_ID.triggered.connect(self.onSearchCell)
         self.actionBy_eNodeB_name_ID.triggered.connect(self.onSearchENodeB)
         self.actionKPI_indicator_diagram.triggered.connect(self.onKPI)
+        self.actionPRB_information_diagram.triggered.connect(self.onPRB)
 
         # Visual elements
         self.actionLog_out.setEnabled(False)
@@ -167,7 +169,7 @@ class Ui_MainWindow(QMainWindow):
         qApp.quit()
 
     def onKPI(self):
-        attrs = self.operations.db.getTbCols('tbKPI')[5:]
+        attrs = self.operations.db.getTbCols('tbKPI')
         NE_names = self.operations.db.getNENames('tbKPI')
         ok, start_time, end_time, ne, attr = Ui_KPIDialog.getResult(attrs, NE_names)
         if ok:
@@ -179,6 +181,12 @@ class Ui_MainWindow(QMainWindow):
     def onPRB(self):
         attrs = self.operations.db.getTbCols('tbPRB')
         NE_names = self.operations.db.getNENames('tbPRB')
+        ok, start_time, end_time, ne, attr = Ui_PRBDialog.getResult(attrs, NE_names)
+        if ok:
+            date, attributes = self.operations.search_PRB(ne, start_time, end_time, attr)
+            Visualization.showPlot(date, attributes, 'Time', attr, attr + '-Time Diagram')
+        else:
+            self.showStatus('Some thing wrong.')
 
     def onAnalyse(self):
         # for test

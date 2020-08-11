@@ -532,6 +532,32 @@ class LogicCore:
             attribute[i] = result[i][col]
         return date, attribute
 
+
+# PRB信息查询
+    def search_PRB(self, info, start, end, attr):  # info——网元名称；start——起始时间；end——结束时间；attr——网元的属性
+        start = start.replace('T', ' ')
+        start = start + ':00'
+        start = datetime.datetime.strptime(start, '%Y-%m-%d %H:%M:%S')
+        start = start.strftime('%m/%d/%Y %H:%M:%S')
+        end = end.replace('T', ' ')
+        end = end + ':00'
+        end = datetime.datetime.strptime(end, '%Y-%m-%d %H:%M:%S')
+        end = end.strftime('%m/%d/%Y %H:%M:%S')
+        cursor = connect.cnxn.cursor(as_dict=True)
+        cursor.execute('select ? from tbPRBnew where 小区名 = ? and 起始时间 between ? and ? ', (attr, info, start, end))
+        result = cursor.fetchall()
+        length = len(result)
+        date = [''] * int(length)
+        attribute = [''] * int(length)
+        cursor.execute('Select Name FROM SysColumns Where id=Object_Id(tbKPI)')  # TODO:查列表名称
+        columns = cursor.fetchall()
+        col = columns.index(attr)
+        for i in range(length):
+            date[i] = str(result[i][0])
+            attribute[i] = result[i][col]
+        return date, attribute
+
+
 if __name__ == '__main__':
     lc = LogicCore()
     # lc.data_import('.xlsx', 'C:/Workspace/学习/数据库课程设计/数据库系统原理课程设计/4-1. 三门峡地区TD-LTE网络数据/1.tbCell.xlsx', 'tbCell')

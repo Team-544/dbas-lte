@@ -8,6 +8,8 @@ class DatabaseManipulate:
     admin_id = 'twist'
     admin_pwd = 'sql998541'
 
+    col_names_dict = {'tbKPI': [], 'tbPRB': ['起始时间', '周期', '网元名称', '小区', '小区名']}
+
     def __init__(self):
         self.__admin_cnxn = pyodbc.connect(DRIVER=self.driver,
                                            SERVER=self.server,
@@ -70,7 +72,8 @@ class DatabaseManipulate:
         admin_cursor.execute("select name from syscolumns where id=object_id('%s')" % tb_name)
         cols = list()
         for tuple in admin_cursor.fetchall():
-            cols.append(tuple[0])
+            if tuple[0] not in ['起始时间', '周期', '网元名称', '小区', '小区名']:
+                cols.append(tuple[0])
         return cols
 
     def doSQL(self, sql):

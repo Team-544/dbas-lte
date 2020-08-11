@@ -76,7 +76,7 @@ class Ui_KPIDialog(QDialog):
 
     def init(self, Dialog):
         self.pushButton.clicked.connect(Dialog.accept)
-        self.pushButton.clicked.connect(Dialog.reject)
+        self.pushButton_2.clicked.connect(Dialog.reject)
         self.dateEdit.setCalendarPopup(True)
         self.dateEdit_2.setCalendarPopup(True)
 
