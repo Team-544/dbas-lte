@@ -70,9 +70,8 @@ class Ui_ParameterSettingDialog(QDialog):
         self.pushButton.clicked.connect(Dialog.accept)
 
     @staticmethod
-    def getResult():
-        print(1)
-        dialog = Ui_ParameterSettingDialog()
+    def getResult(info, threshold, unit):
+        dialog = Ui_ParameterSettingDialog(info, threshold, unit)
         result = dialog.exec_()
         value = float(dialog.horizontalSlider.value())
         if dialog.label_2.text() == '%':

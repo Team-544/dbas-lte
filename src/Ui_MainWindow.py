@@ -21,7 +21,7 @@ from src.Ui_ExportDialog import Ui_ExportDialog
 from src.Ui_ImportDialog import Ui_ImportDialog
 from src.Ui_KPIDialog import Ui_KPIDialog
 from src.Ui_PRBDialog import Ui_PRBDialog
-from src.Ui_RatioSetDialog import Ui_ParameterSettingDialog
+from src.Ui_ParameterSettingDialog import Ui_ParameterSettingDialog
 from src.Ui_RegisterDialog import Ui_RegisterDialog
 from src.Ui_ResultDialog import Ui_ResultDialog
 from src.Ui_SignInDialog import Ui_SignInDialog
@@ -222,17 +222,17 @@ class Ui_MainWindow(QMainWindow):
             ok = Ui_ResultDialog.getResult(cols, lines)
 
     def onC2IAnalyse(self):
-        try:
+        ok, ratio = Ui_ParameterSettingDialog.getResult('Please appoint a filtrate value:', 100, '')
+        if ok:
+            self.operations.create_C2I_table(ratio)
             Ui_C2IDialog.getResult(self.operations,
                                    self.operations.db.getCellInC2I('SCELL'),
                                    self.operations.db.getCellInC2I('NCELL'))
-        except BaseException as e:
-            print(e.args)
 
     def onTriples(self):
-        ok, ratio = Ui_ParameterSettingDialog.getResult()
+        ok, ratio = Ui_ParameterSettingDialog.getResult('Set a PrbABS6 ratio', 100, '%')
         if ok:
-            print(1)
+            print(ratio)
             result = self.operations.db.trigroup_search(ratio)
             print(1)
             Ui_ResultDialog.getResult(['CELL1', 'CELL2', 'CELL3'], result)
