@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'RatioSet.ui'
+# Form implementation generated from reading ui file 'ParameterSetting.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.0
 #
@@ -21,23 +21,23 @@ class Ui_Dialog(object):
         self.label = QtWidgets.QLabel(Dialog)
         self.label.setGeometry(QtCore.QRect(30, 20, 201, 16))
         self.label.setObjectName("label")
-        self.widget = QtWidgets.QWidget(Dialog)
-        self.widget.setGeometry(QtCore.QRect(20, 50, 261, 21))
-        self.widget.setObjectName("widget")
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.widget)
+        self.layoutWidget = QtWidgets.QWidget(Dialog)
+        self.layoutWidget.setGeometry(QtCore.QRect(20, 50, 261, 21))
+        self.layoutWidget.setObjectName("layoutWidget")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.layoutWidget)
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.horizontalSlider = QtWidgets.QSlider(self.widget)
+        self.horizontalSlider = QtWidgets.QSlider(self.layoutWidget)
         self.horizontalSlider.setOrientation(QtCore.Qt.Horizontal)
         self.horizontalSlider.setObjectName("horizontalSlider")
         self.horizontalLayout_2.addWidget(self.horizontalSlider)
-        self.spinBox = QtWidgets.QSpinBox(self.widget)
+        self.spinBox = QtWidgets.QSpinBox(self.layoutWidget)
         self.spinBox.setMaximum(100)
         self.spinBox.setObjectName("spinBox")
         self.horizontalLayout_2.addWidget(self.spinBox)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.label_2 = QtWidgets.QLabel(self.widget)
+        self.label_2 = QtWidgets.QLabel(self.layoutWidget)
         self.label_2.setObjectName("label_2")
         self.horizontalLayout.addWidget(self.label_2)
         self.horizontalLayout_2.addLayout(self.horizontalLayout)
@@ -47,7 +47,7 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Ratio set"))
+        Dialog.setWindowTitle(_translate("Dialog", "Parameter setting"))
         self.pushButton.setText(_translate("Dialog", "OK"))
         self.label.setText(_translate("Dialog", "Set a PrbABS6 ratio"))
         self.label_2.setText(_translate("Dialog", "%"))

@@ -17,7 +17,6 @@ from pathlib import Path
 # 临时表，用于bulk insert
 test_addr = "C:/TD-LTE/temp.csv"
 # RSRP测量值对的数量筛选标准，测量值对数量小于此标准则被筛掉
-messure_std = 5
 partition = 20  # 将数据以50行为一组写入
 
 
@@ -524,7 +523,7 @@ class LogicCore:
         length = len(result)
         date = [''] * int(length)
         attribute = [''] * int(length)
-        cursor.execute('') #TODO:查列表名称
+        cursor.execute('')  # TODO:查列表名称
         columns = cursor.fetchall()
         col = columns.index(attr)
         for i in range(length):
@@ -532,8 +531,7 @@ class LogicCore:
             attribute[i] = result[i][col]
         return date, attribute
 
-
-# PRB信息查询
+    # PRB信息查询
     def search_PRB(self, info, start, end, attr):  # info——网元名称；start——起始时间；end——结束时间；attr——网元的属性
         start = start.replace('T', ' ')
         start = start + ':00'
@@ -558,14 +556,16 @@ class LogicCore:
         return date, attribute
 
     # 主邻小区C2I干扰分析
-    def C2I_interrupt_analysis(self, SCELL, NCELL):  # SCELL——主小区ID；NCELL——邻小区ID
-        data = {'C2I_Mean': '', 'std': '', 'PrbC2I9': '', 'PrbABS6': ''}
+    def create_C2I_table(self, messure_std):
         cursor = connect.cnxn.cursor()
         cursor.execute('delete from tbC2Inew')
         connect.cnxn.commit()
         cursor = connect.cnxn.cursor()
         cursor.execute('exec storeInC2I ?', messure_std)  # 这里注意要传入用于筛选的参数
         connect.cnxn.commit()
+
+    def C2I_interrupt_analysis(self, SCELL, NCELL):  # SCELL——主小区ID；NCELL——邻小区ID
+        data = {'C2I_Mean': '', 'std': '', 'PrbC2I9': '', 'PrbABS6': ''}
         cursor = connect.cnxn.cursor()
         cursor.execute('select * from tbC2Inew where SCELL=? and NCELL=?', (SCELL, NCELL))
         result = cursor.fetchall()
@@ -613,7 +613,8 @@ class LogicCore:
             else:
                 PRB9 = 0
                 PRB6 = 0
-            cursor.execute('update tbC2Inew set PrbC2I9=?, PrbABS6=? where SCELL=? and NCELL=?', (PRB9, PRB6, SCELL, NCELL))
+            cursor.execute('update tbC2Inew set PrbC2I9=?, PrbABS6=? where SCELL=? and NCELL=?',
+                           (PRB9, PRB6, SCELL, NCELL))
             connect.cnxn.commit()
         cursor = connect.cnxn.cursor()
         cursor.execute('exec insertTBC2I3 ?', value)
@@ -622,6 +623,7 @@ class LogicCore:
         cursor.execute('select * from tbC2I3')
         result = cursor.fetchall()
         return result
+
 
 if __name__ == '__main__':
     lc = LogicCore()

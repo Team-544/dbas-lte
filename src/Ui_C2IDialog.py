@@ -135,10 +135,10 @@ class Ui_C2IDialog(QDialog):
 
     def onAnalyse(self):
         data = self.op.C2I_interrupt_analysis(self.comboBox.currentText(), self.comboBox_2.currentText())
-        self.label_4.setText(data['C2I_Mean'])
-        self.label_6.setText(data['std'])
-        self.label_8.setText(data['PrbC2I9'])
-        self.label_10.setText(data['PrbABS6'])
+        self.label_4.setText(str(data['C2I_Mean']))
+        self.label_6.setText(str(data['std']))
+        self.label_8.setText(str(data['PrbC2I9']))
+        self.label_10.setText(str(data['PrbABS6']))
 
     def onSaveAll(self):
         ok, table, filename = Ui_ExportDialog.getResult(['tbC2Inew'])

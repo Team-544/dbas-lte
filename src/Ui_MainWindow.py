@@ -21,7 +21,7 @@ from src.Ui_ExportDialog import Ui_ExportDialog
 from src.Ui_ImportDialog import Ui_ImportDialog
 from src.Ui_KPIDialog import Ui_KPIDialog
 from src.Ui_PRBDialog import Ui_PRBDialog
-from src.Ui_RatioSetDialog import Ui_RatioSetDialog
+from src.Ui_RatioSetDialog import Ui_ParameterSettingDialog
 from src.Ui_RegisterDialog import Ui_RegisterDialog
 from src.Ui_ResultDialog import Ui_ResultDialog
 from src.Ui_SignInDialog import Ui_SignInDialog
@@ -230,9 +230,11 @@ class Ui_MainWindow(QMainWindow):
             print(e.args)
 
     def onTriples(self):
-        ok, ratio = Ui_RatioSetDialog.getResult()
+        ok, ratio = Ui_ParameterSettingDialog.getResult()
         if ok:
+            print(1)
             result = self.operations.db.trigroup_search(ratio)
+            print(1)
             Ui_ResultDialog.getResult(['CELL1', 'CELL2', 'CELL3'], result)
 
     def showStatus(self, msg):

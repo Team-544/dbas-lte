@@ -61,7 +61,7 @@ class DatabaseManipulate:
 
     def getCellInC2I(self, col_name):
         admin_cursor = self.__admin_cnxn.cursor()
-        admin_cursor.execute("SELECT DISTINCT %s FROM tbC2I" % col_name)
+        admin_cursor.execute("SELECT DISTINCT %s FROM tbC2Inew" % col_name)
         cells = list()
         for tuple in admin_cursor.fetchall():
             cells.append(tuple[0])

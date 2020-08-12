@@ -13,11 +13,15 @@ from PyQt5.QtGui import QIntValidator
 from PyQt5.QtWidgets import QDialog
 
 
-class Ui_RatioSetDialog(QDialog):
-    def __init__(self):
-        super(Ui_RatioSetDialog, self).__init__()
+class Ui_ParameterSettingDialog(QDialog):
+    def __init__(self, info, threshold, unit):
+        super(Ui_ParameterSettingDialog, self).__init__()
         self.setupUi(self)
         self.init(self)
+        self.label.setText(info)
+        self.label_2.setText(unit)
+        self.horizontalSlider.setRange(0, threshold)
+        self.spinBox.setRange(0, threshold)
 
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
@@ -67,6 +71,10 @@ class Ui_RatioSetDialog(QDialog):
 
     @staticmethod
     def getResult():
-        dialog = Ui_RatioSetDialog()
+        print(1)
+        dialog = Ui_ParameterSettingDialog()
         result = dialog.exec_()
-        return result, int(dialog.lineEdit.text())
+        value = float(dialog.horizontalSlider.value())
+        if dialog.label_2.text() == '%':
+            value /= 100
+        return result,  value
