@@ -230,12 +230,16 @@ class Ui_MainWindow(QMainWindow):
                                    self.operations.db.getCellInC2I('NCELL'))
 
     def onTriples(self):
-        ok, ratio = Ui_ParameterSettingDialog.getResult('Set a PrbABS6 ratio', 100, '%')
+        ok, ratio = Ui_ParameterSettingDialog.getResult('Please appoint a filtrate value:', 100, '')
         if ok:
-            print(ratio)
-            result = self.operations.db.trigroup_search(ratio)
-            print(1)
-            Ui_ResultDialog.getResult(['CELL1', 'CELL2', 'CELL3'], result)
+            self.operations.create_C2I_table(ratio)
+            print('table created')
+            ok, ratio = Ui_ParameterSettingDialog.getResult('Set a PrbABS6 ratio', 100, '%')
+            if ok:
+                print(ratio)
+                result = self.operations.trigroup_search(ratio)
+                print('ready to show')
+                Ui_ResultDialog.getResult(['CELL1', 'CELL2', 'CELL3'], result)
 
     def showStatus(self, msg):
         if msg:

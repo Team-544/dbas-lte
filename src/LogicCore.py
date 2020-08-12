@@ -582,24 +582,7 @@ class LogicCore:
 
     # 查询重叠覆盖干扰三元组
     def trigroup_search(self, value):  # value——查询的基准
-        if str(value).count('.') == 1:
-            num_left = int(value)
-            num_right = value - int(value)
-            if num_left != '0' or not (num_right.isdigit()):
-                print('输入的数字应为0~1之间的小数！')
-                # TODO：错误处理
-        else:
-            print('输入的数字应为0~1之间的小数！')
-            # TODO：错误处理
-        cursor = connect.cnxn.cursor()
-        cursor.execute('delete from tbC2I3')
-        connect.cnxn.commit()
-        cursor = connect.cnxn.cursor()
-        cursor.execute('delete from tbC2Inew')
-        connect.cnxn.commit()
-        cursor = connect.cnxn.cursor()
-        cursor.execute('exec storeInC2I ?', messure_std)
-        connect.cnxn.commit()
+        print('ready to search')
         cursor = connect.cnxn.cursor()
         cursor.execute('select SCELL, NCELL, C2I_Mean, std from tbC2Inew')
         result = cursor.fetchall()
@@ -622,6 +605,7 @@ class LogicCore:
         cursor = connect.cnxn.cursor()
         cursor.execute('select * from tbC2I3')
         result = cursor.fetchall()
+        print(result)
         return result
 
 
