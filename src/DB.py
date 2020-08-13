@@ -80,9 +80,15 @@ class DatabaseManipulate:
         admin_cursor.execute("select name from syscolumns where id=object_id('%s')" % tb_name)
         cols = list()
         for tuple in admin_cursor.fetchall():
-            if tuple[0] not in ['起始时间', '周期', '网元名称', '小区', '小区名']:
-                cols.append(tuple[0])
+            # if tuple[0] not in ['起始时间', '周期', '网元名称', '小区', '小区名']:
+            cols.append(tuple[0])
         return cols
+
+    def getAll(self, tb_name):
+        admin_cursor = self.__admin_cnxn.cursor()
+        admin_cursor.execute("select * from " + tb_name)
+        res = admin_cursor.fetchall()
+        return res
 
     def doSQL(self, sql):
         user_cursor = self.user_cnxn.cursor()
@@ -93,5 +99,4 @@ class DatabaseManipulate:
 
 if __name__ == '__main__':
     dbm = DatabaseManipulate()
-    for name in dbm.getENodeB():
-        print(name)
+    dbm.getAll('tbC2I')

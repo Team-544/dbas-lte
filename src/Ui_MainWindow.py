@@ -9,6 +9,8 @@
 
 
 import sys
+import time
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QCoreApplication, Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, qApp, QFileDialog
@@ -28,6 +30,7 @@ from src.Ui_SignInDialog import Ui_SignInDialog
 from src.Ui_LogOutDialog import Ui_LogOutDialog
 from src.Visualization import Visualization
 
+LOG_IN_CONFIRM = False
 
 class Ui_MainWindow(QMainWindow):
     def __init__(self):
@@ -42,6 +45,32 @@ class Ui_MainWindow(QMainWindow):
         MainWindow.resize(408, 317)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
+        self.formLayoutWidget = QtWidgets.QWidget(self.centralwidget)
+        self.formLayoutWidget.setGeometry(QtCore.QRect(10, 200, 281, 71))
+        self.formLayoutWidget.setObjectName("formLayoutWidget")
+        self.formLayout = QtWidgets.QFormLayout(self.formLayoutWidget)
+        self.formLayout.setContentsMargins(0, 0, 0, 0)
+        self.formLayout.setObjectName("formLayout")
+        self.label = QtWidgets.QLabel(self.formLayoutWidget)
+        self.label.setMinimumSize(QtCore.QSize(0, 30))
+        self.label.setText("")
+        self.label.setObjectName("label")
+        self.formLayout.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.label)
+        self.label_2 = QtWidgets.QLabel(self.formLayoutWidget)
+        self.label_2.setMinimumSize(QtCore.QSize(0, 30))
+        self.label_2.setText("")
+        self.label_2.setObjectName("label_2")
+        self.formLayout.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.label_2)
+        self.label_3 = QtWidgets.QLabel(self.formLayoutWidget)
+        self.label_3.setMinimumSize(QtCore.QSize(0, 30))
+        self.label_3.setText("")
+        self.label_3.setObjectName("label_3")
+        self.formLayout.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.label_3)
+        self.label_4 = QtWidgets.QLabel(self.formLayoutWidget)
+        self.label_4.setMinimumSize(QtCore.QSize(0, 30))
+        self.label_4.setText("")
+        self.label_4.setObjectName("label_4")
+        self.formLayout.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.label_4)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 408, 22))
@@ -143,14 +172,28 @@ class Ui_MainWindow(QMainWindow):
         self.actionOverlapping_interference_triples.triggered.connect(self.onTriples)
 
         # Visual elements
-        self.actionLog_out.setEnabled(False)
+        if LOG_IN_CONFIRM:
+            self.actionLog_out.setEnabled(False)
+            self.menuTools.setEnabled(False)
+            self.actionExport.setEnabled(False)
+            self.actionImport.setEnabled(False)
+
+        # test
 
     def onSignIn(self):
         ok, info, account, password = Ui_SignInDialog.getResult(self)
         if ok:
             if self.operations.signIn(account, password):
-                self.actionLog_out.setEnabled(True)
-                self.actionSign_in.setEnabled(False)
+                if LOG_IN_CONFIRM:
+                    self.actionLog_out.setEnabled(True)
+                    self.actionSign_in.setEnabled(False)
+                    self.menuTools.setEnabled(True)
+                    self.actionExport.setEnabled(True)
+                    self.actionImport.setEnabled(True)
+                    self.label.setText('Log in as:')
+                    self.label_2.setText('Log in time:')
+                    self.label_3.setText(account)
+                    self.label_4.setText(str(time.asctime(time.localtime(time.time()))))
                 self.showStatus("Sign in successfully.")
 
     def onLogOut(self):
@@ -158,8 +201,16 @@ class Ui_MainWindow(QMainWindow):
         if ok:
             self.operations.logOut()
             self.showStatus("Logged out.")
-            self.actionLog_out.setEnabled(False)
-            self.actionSign_in.setEnabled(True)
+            if LOG_IN_CONFIRM:
+                self.actionLog_out.setEnabled(False)
+                self.actionSign_in.setEnabled(True)
+                self.menuTools.setEnabled(False)
+                self.actionExport.setEnabled(False)
+                self.actionImport.setEnabled(False)
+                self.label.clear()
+                self.label_2.clear()
+                self.label_3.clear()
+                self.label_4.clear()
 
     def onRegister(self):
         ok, info, account, pwd, pwd2 = Ui_RegisterDialog.getResult()
@@ -169,14 +220,15 @@ class Ui_MainWindow(QMainWindow):
             self.showStatus("The passwords do not match, try again.")
 
     def onImport(self):
-        ok, table, filename = Ui_ImportDialog.getResult(self.operations.db.getTables())
+        ok = Ui_ImportDialog.getResult(self.operations.db.getTables(), self.operations.myImport)
         if ok:
-            self.operations.data_import('xlsx', filename, table)
+            self.showStatus('Import successfully')
 
     def onExport(self):
         ok, table, filename = Ui_ExportDialog.getResult(self.operations.db.getTables())
         if ok:
-            self.operations.data_export(str.split(filename, '.'), filename, table)
+            self.operations.data_export(filename, table)
+            self.showStatus('Export successfully')
 
     def onExit(self):
         qApp.quit()
